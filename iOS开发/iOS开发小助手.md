@@ -1,7 +1,8 @@
 [TOC]
 
-## 让collectionView能够占满屏幕（消除顶部自动添加的空白部分）
+## CollectionView
 
+### 让collectionView能够占满屏幕（消除顶部自动添加的空白部分）
 ```swift
 if #available(iOS 11.0, *) {
     collectionView.contentInsetAdjustmentBehavior = .never
@@ -10,14 +11,20 @@ if #available(iOS 11.0, *) {
 }
 ```
 
-## 添加圆角
+### collectionView滑动到指定cell（该cell置顶）
 
+```swift
+collectionView.selectItem(at: IndexPath(item: index, section: 0), animated: true, scrollPosition: .top)
+```
+
+## Layer
+
+### 添加圆角
 ```swift
 layer.cornerRadius = 15.0
 ```
 
-## 添加阴影
-
+### 添加阴影
 ```swift
 layer.shadowColor = UIColor.black.cgColor
 layer.shadowOpacity = 0.04
@@ -91,5 +98,29 @@ if var viewControllers = self?.navigationController?.viewControllers {
     viewControllers.append(ViewControllerC())
     self?.navigationController?.setViewControllers(viewControllers, animated: true)
 }
+```
+
+## Audio & Video
+
+### 播放音频
+
+```swift
+if let resourceURL = Bundle.main.url(forResource: "testMp3", withExtension: "mp3") {
+    let audioPlayer = try? AVAudioPlayer(contentsOf: resourceURL)
+    audioPlayer?.play()
+}
+```
+
+> AVPlayer可以通过URL播放视频和音频，AVAudioPlayer只能播放本地音频
+
+## View的仿射变换
+
+### View镜像、缩放、旋转、平移
+
+```swift
+view.transform = CGAffineTransform(scaleX: -1, y: 1) // 水平镜像
+view.transform = CGAffineTransform(scaleX: 2, y: 2) // 放大
+view.transform = CGAffineTransform(rotationAngle: 1.5) // 旋转
+view.transform = CGAffineTransform(translationX: 100, y: 50) // 平移
 ```
 

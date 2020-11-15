@@ -1,5 +1,7 @@
 [TOC]
 
+# RxSwift
+
 ## 同步异步、阻塞非阻塞
 
 RxSwift是简化异步编程的框架，因此首先需要了解同步异步、阻塞非阻塞
@@ -38,7 +40,7 @@ RxSwift是简化异步编程的框架，因此首先需要了解同步异步、�
 
 情况1和情况3中老张就是阻塞的，媳妇喊他都不知道。虽然3中响水壶是异步的，可对于立等的老张没有太大的意义。所以一般异步是配合非阻塞使用的，这样才能发挥异步的效用。
 
-## RxSwift
+## RxSwift基础
 
 ### Observable
 
@@ -124,4 +126,81 @@ collectionView.rx.observe(CGPoint.self, "contentOffset")
 ```
 
 
+
+## 问题汇总
+
+### Simultaneous accesses to 0x4c0a3f0f8, but modification requires exclusive access
+
+在使用RxSwift时，对变量`A`进行观测，然后在`A`的订阅方法中调用某个方法`function`，在`function`中通过`self.A`的方式再度获取变量`A`，此时会报这个访问冲突。
+
+解决方法：已经对变量A进行了观测，说明后面会用到这个变量，因此应该通过传参的方式将`A`传递出去。
+
+### 内存泄漏
+
+自己observe自己的属性产生引用循环，造成内存泄漏，例子如下：
+
+```swift
+// TestView无法被释放
+class TestView: UIView {
+    let bag = DisposeBag()
+    init() {
+        self.rx.observe(Bool.self, #keypath(TestView.isEnable))
+            .subscribe(onNext: { [weak self] in
+                  //...
+             })
+            .	disposed(by: bag)
+    }
+}
+```
+
+原因在于使用observe方法创建Observable时，有一个参数retainSelf默认为true
+
+```swift
+public func observe<Element>(_ type: Element.Type, _ keyPath: String, options: KeyValueObservingOptions = [.new, .initial], retainSelf: Bool = true) -> Observable<Element?> {
+        return KVOObservable(
+          object: self.base, 
+          keyPath: keyPath, 
+          options: options,
+          retainTarget: retainSelf
+        ).asObservable()
+}
+```
+
+在创建KVOObservable中，凭借retainSelf变量决定是否持有base的强引用
+
+```swift
+private final class KVOObservable<Element>
+    : ObservableType
+    , KVOObservableProtocol {
+    typealias Element = Element?
+
+    unowned var target: AnyObject
+    var strongTarget: AnyObject?
+
+    var keyPath: String
+    var options: KeyValueObservingOptions
+    var retainTarget: Bool
+
+    init(object: AnyObject, keyPath: String, options: KeyValueObservingOptions, retainTarget: Bool) {
+        self.target = object
+        self.keyPath = keyPath
+        self.options = options
+        self.retainTarget = retainTarget
+      	// 对base的强引用
+        if retainTarget {
+            self.strongTarget = object
+        }
+    }
+		// ...
+}
+```
+
+可以看到如果retainSelf设置为false，则只会赋值给一个unowned变量，不影响base被释放
+
+> unowned引用和weak一样，不会增加对象的引用计数，对象被释放后weak变量会标记为nil，而unowned变量由于不是可选类型，无法标记为nil，所以会变成悬挂指针。因此unowned安全的使用方式是确保被unowned标记的对象拥有更长的生命周期。在上面的代码中可以看到在TestView创建了KVOObservable，显然TestView拥有比KVOObservable更长的生命周期，因此被unowned标记是正确的。
+
+该问题的两个解决方法
+
+1. 使用observe，并将retainSelf参数改为false
+2. 使用observeWeakly
 

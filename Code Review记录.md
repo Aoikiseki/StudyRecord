@@ -56,3 +56,7 @@ let ret = array.map({ (subArray: [Int]) in
 
 1. 遵循驼峰
 2. 缩写变量名部分要全大写，比如ID、API，如果缩写的位置在开头的话还是要id、api
+
+### FrogConstants
+
+在记录打点的URL即创建FrogConstants时，由于该类不会被实例化，因此可以写enum不写struct，因为enum中如果没有case就无法被实例化

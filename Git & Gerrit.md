@@ -88,8 +88,45 @@ $ git config --global user.email "email@example.com"
 
 个人经验：如果需要开一个分支去完成一个周期较长的需求，在这个需求中你提交了许多的commit，那么在需求完成的时候，master分支必定被其他人修改过很多地方，这时候如果你去rebase的话，解决merge conflict会比较头疼，所以使用merge比较好；如果你做的需求只需要一两个commit，那么显然使用不会产生merge commit的rebase更好。
 
-### Gerrit
+### submodule
+
+添加子模块到指定目录`git submodule add`+`URL`+`Path`
+
+## Gerrit
 
 公司使用Gerrit作为代码库，有一些特有的命令
 
 push代码 `git push origin HEAD:refs/for/分支名`
+
+
+
+## 问题记录
+
+### git revert和git cherry-pick
+
+场景一：
+
+1. `develop`分支上提交commit
+2. `develop`分支上切出`feature`分支
+3. `develop`分支对commit revert
+4. `feature` merge到`develop`
+
+问题：从`feature` merge回`develop`后，`feature`中的commit能否被带回`develop`？
+
+答：不会
+
+由于`feature`中的commitId和步骤3中被revert的commitId一致，因此结果就是feature merge回develop后，该commit也是不存在的
+
+场景二：
+
+1. `develop`分支上切出`feature`分支
+2. `develop`分支上提交commit
+3. `feature`分支对commit进行cherry-pick
+4. `develop`分支对commit revert
+5. `feature` merge到`develop`
+
+同样的问题：从`feature` merge回`develop`后，`feature`中的commit能否被带回`develop`？
+
+答：会
+
+因为cherry-pick虽然会将commit的内容搬过去，但是commitId会变，属于一个新的commit，不会被revert掉

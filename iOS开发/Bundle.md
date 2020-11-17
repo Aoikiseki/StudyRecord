@@ -31,13 +31,7 @@ let myBundle = Bundle(for: NSClassFromString("MyPrivateClass")!)
 Bundle.main.url(forResource: String?, withExtension: String?) 
 // Get resource`s path String
 Bundle.main.path(forResource: String?, ofType: String?) 
+注：项目的Build Phases -> Copy Bundle Resources中必须包含要查找的文件 
 ```
 
-<<<<<<< HEAD
-
-
-=======
-注：项目的Build Phases -> Copy Bundle Resources中必须包含要查找的文件 
-
 ## Bundle和Asset的关系？
->>>>>>> Daily Update

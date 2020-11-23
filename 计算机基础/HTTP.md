@@ -181,7 +181,7 @@ HTTP的缓存对象更多是静态资源文件、比如css、js、图片等资�
 
 - Expires响应头，过期时间
 
-- Last-Modified响应头，资源最新修改时间
+- Last-Modified响应头，资源最新修改时o间
 
   if-Modified-Since请求头，资源最新修改时间
 
@@ -214,3 +214,30 @@ HTTP的缓存对象更多是静态资源文件、比如css、js、图片等资�
 HTTP/1.1 200 OK 不使用断点续传
 
 HTTP/1.1 206 Partial Content 使用断点续传
+
+# HTTPS
+
+http协议不对内容进行加密，容易被截获和修改
+
+## 非对称加密
+
+A与B进行通信，分三步
+
+- A向B发送Public Key
+- B收到Public Key后将准备进行通信的Core Key使用Public Key进行加密得到Secret Key，发送给A
+- A收到Secret Key后使用Private Key解密得到Core Key
+
+这样，即使Public Key在最开始被截获，但是真正用于加密通信的Core Key在网络上没有明文传输，所以是**相对**安全的。非对称加密并不是绝对安全的，因为中间人可能会在第一步截获Public Key，并偷梁换柱向B发送自己制造的Public Key2，从而影响后续的信息传输。
+
+## 证书机制
+
+考虑到非对称加密并非绝对安全，这里引入了证书机构，一般来说我们的浏览器中都设置好了各大证书机构的信息，所以浏览器可以直接进行解密。
+
+还是A与B进行通信
+
+- A通过向证书机构发送Public Key得到下发的证书，并向B发送证书而非Public Key
+- B使用证书机构的公钥对证书进行解密得到Public Key，并将Core Key加密为Secret Key，发送给A
+- A收到Secret Key后使用Private Key解密得到Core Key
+
+整个流程后50%没有变化，只是前50%的流程引入了证书机构
+

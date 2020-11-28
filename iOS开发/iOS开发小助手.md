@@ -13,8 +13,14 @@ if #available(iOS 11.0, *) {
 
 ### collectionView滑动到指定cell（该cell置顶）
 
+需要等待collectionView reload结束执行才有效果
+
+https://stackoverflow.com/questions/45546087/scrolltoitem-does-not-work/45546357
+
 ```swift
-collectionView.selectItem(at: IndexPath(item: index, section: 0), animated: true, scrollPosition: .top)
+DispatchQueue.main.async {
+  	self.collectionView.scrollToItem(at: IndexPath(item: 0, section: 1), at: .top, animated: true)
+}
 ```
 
 ## Layer

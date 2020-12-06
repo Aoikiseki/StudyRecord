@@ -130,3 +130,27 @@ view.transform = CGAffineTransform(rotationAngle: 1.5) // 旋转
 view.transform = CGAffineTransform(translationX: 100, y: 50) // 平移
 ```
 
+## ViewController的切换
+
+### present
+
+当执行代码`A.present(B, animated: true)`后
+
+属性presentingViewController：
+
+- 如果A present B modally，则B.presentingViewController == A
+- 如果B没有被A present modally，但是B的祖先C被present modally，则该属性被赋为present C modally的VC
+- 否则为nil
+
+属性presentedViewController：
+
+- A.presentedViewController == B
+
+利用两个属性可以判断某个VC是否被当前VC所present
+
+```swift
+func isPresentedViewController(viewController: UIViewController) {
+  	return viewController.presentingViewController.presentedViewController == viewController
+}
+```
+

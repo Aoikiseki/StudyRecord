@@ -1,10 +1,13 @@
 [TOC]
 
-在进行iOS开发前，需要对一些常见词汇有一些基本认知
+# iOS开发新手上路
 
-## 原生框架Cocoa And CocoaTouch
+> 在进行iOS开发前，需要对一些常见词汇有一些基本认知
+>
 
-> 简言之，Cocoa是macOS上原生的API集合，CocoaTouch则是iOS上的原生API集合
+## 原生框架Cocoa & CocoaTouch
+
+> Cocoa是macOS上原生的API集合，CocoaTouch则是iOS上的原生API集合
 
 ### Cocoa
 
@@ -38,23 +41,96 @@ Cocoa Touch是iOS上的原生API集合。Cocoa Touch是基于Cocoa实现，增�
 
 - https://developer.apple.com/documentation/coredata
 
-## 响应式编程RxSwift、RxCocoa
+## Cocoapods
 
-> 文章主要摘自https://cloud.tencent.com/developer/news/696683
+> CocoaPods is a dependency manager for Swift and Objective-C Cocoa projects. 
 
-原生框架的API很多时候开发效率并不尽人意，不光体现在API的可读性和易用性上，也体现在命令式编程和响应式编程的差异上，对于命令式编程和响应式编程，wiki上有一个生动的例子：
+CocoaPods是swift和oc的依赖管理工具，用来管理项目中依赖的第三方库和本地库的版本，也可以用来安装依赖。Cocoapods基于Ruby，而官方推荐使用MacOS自带的Ruby即可。
 
-> 对于命令式编程，当a = b + c，a由b+c计算得到；但是之后，b和c发生了变化，这个变化对a并不生效，a还是保持原有的值；而当使用响应式编程时，当b和c发生变化，程序不需要再次执行a = b + c公式，a的值就会自动更新。
+### 安装
 
-在实际的响应式开发中，我们并不需要手动存储和监听值是否被更新，而是将监听值变化的工作交给他人来做，甚至可以预先设定好当该值发生变化时要执行那些动作，这样当值发生了改变后就可以自动执行一系列动作，实现自动化，大大提升开发效率。
+`sudo gem install cocoapods`
 
-目前响应式编程库主要分为两派
+### 使用
 
-- ReactiveX主导的rx系列库，语言支持如RxSwift, RxKotlin, 平台支持如RxAndroid, RxCocoa
-- ReactiveCocoa(GitHub发起)库，语言仅支持swift，objective-c，平台仅支持iOS
+- `pod init`
 
-本人在工作中，主要接触到的是前者，即RxSwift和RxCocoa。一个是Rx在Swift语言上的扩展，另一个是Rx在Cocoa平台的扩展：
+  Cocoapods提供的初始化方法，init后在项目目录下生成`Podfile`，我们需要在`Podfile`中填写需要管理的依赖项
 
-- RxSwift：响应式编程在Swift语言上的实现库
-- RxCocoa：针对Cocoa平台（iOS & Mac）的响应式编程库
+- `Podfile`
+
+  `Podfile`书写例子如下
+  可以用`'~> x.x'`指定从远端拉取的**最小**版本，一般不指定到第二个小数点，因为CocoaPods会忽略第二个小数点。
+  也可以用`:path => './xxx/yyy'`指定使用本地版本
+
+  ```swift
+  platform :ios, '8.0'
+  use_frameworks!
+  
+  target 'MyApp' do
+    pod 'AFNetworking', '~> 2.6'
+    pod 'ORStackView', '~> 3.0'
+    pod 'LocalDepdency', :path => './Vendor/LeoUI'
+  end
+  ```
+
+- `pod install`
+
+  安装依赖项，安装后目录下生成`.xcworkspace`的项目启动器，替代`.xcodeproj`
+
+## 观察者设计模式
+
+> Observer pattern is used for one-to-many communication.Subject-object automatically notifies its observers about given state change or an event.
+
+观察者设计模式监听被观察对象的状态，状态发生变化后通知观察者执行对应的action，是iOS开发中经常用于两个对象间数据通信的设计模式，举一个银行卡的例子如下：
+
+> 我们办理的银行卡，如果没有与手机绑定，每次想查询余额都要到银行的ATM机操作一番，这就是轮询。如果与手机/微信绑定，每次账户余额发生变动，都会以短信/微信消息的方式通知我们，这就用到了观察者模式。
+
+iOS原生框架中对于观察模式有两种实现，即KVO和NotificationCenter
+
+### KVO（Key-value observing）与RxSwift
+
+> Key-value observing is a mechanism that allows objects to be notified of changes to specified properties of other objects.
+
+原生的KVO使用略显繁琐，这里不做介绍，而是要说一下提供了更好用的KVO的第三方库RxSwift。RxSwift可以非常简单地将一个变量包装为可被观察的对象即Observable，进而在需要监听变量变化的地方创建观察者即Observer，在Observer中提供针对变量变化时的actions。RxSwift中的KVO使用起来为如下两步：
+
+- 将待观察变量声明为Observable
+- 在监听的地方创建Observer
+
+### NotificationCenter
+
+NotificationCenter是以广播的方式发布一则通知，每则通知都会首先传递给Center，由Center进行派发给所有监听这一通知的对象，一同派发的还有这则通知附带的自定义内容。NotificationCenter的大致使用可以分为如下几步：
+
+- 定义通知
+- 监听通知
+- 发布通知
+
+### NotificationCenter vs KVO
+
+NotificationCenter的缺点是必须显式定义通知、显式发布通知，优点是可以跨很多层进行数据通信，因此在本人日常开发中，经常在需要跨多个ViewController进行数据传输的场景使用NotificationCenter。
+
+而KVO则需要在创建监听的地方能够访问到被监听的变量，因此难以完成跨越多层的数据通信，在iOS开发中经常被用在View-ViewModel之间的数据通信。
+
+### 参考文献
+
+- https://dmcyk.xyz/post/kvo-rx-nc-benchmarks/kvo-rx-nc-benchmarks/
+- https://cloud.tencent.com/developer/news/696683
+- https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/KeyValueObserving/KeyValueObserving.html
+
+## iOS开发基础知识
+
+每个UIView都有一个图层CALayer，CALayer负责渲染视图，UIView负责其他任务，比如对点击事件做出响应
+
+`frame`：视图大小以及在父View中的位置
+
+ViewController中的view是延时加载，只有需要用到的时候才会创建
+
+使用`UIScreen.main.bounds`得到的屏幕尺寸不对?
+应该是删除了plist中的`Launch screen interface file base name`，加回来就好了
+
+LayoutGuide的snapkit用法
+
+```swift
+make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+```
 

@@ -241,3 +241,42 @@ A与B进行通信，分三步
 
 整个流程后50%没有变化，只是前50%的流程引入了证书机构
 
+# WebSocket
+
+WebSocket是HTTP的长连接实现，并且兼容了现有的HTTP协议
+
+## WebSocket的握手
+
+WebSocket借用HTTP完成握手
+
+客户端向服务端发送的WebSocket请求内容如下：
+
+![image-20201125233156498](/Users/yuanhao/Library/Application Support/typora-user-images/image-20201125233156498.png)
+
+Upgrade：websocket，告诉服务器当前使用websocket协议
+
+Sec-WebSocket-Key：浏览器生成的base64加密串，用于验证服务器的websocket有效性
+
+服务端返回的内容如下：
+
+![image-20201125233503618](/Users/yuanhao/Library/Application Support/typora-user-images/image-20201125233503618.png)
+
+传统的HTTP只能用于客户端向服务端发送请求，有两种解决方式
+
+- AJAX轮询（固定时间轮询）
+- Long Poll（阻塞轮询）
+
+上面两种情况，对服务器要求都很高，前者要求有很快的处理速度，后者要求有很高的并发量。而WebSocket的出现就是为了解决这两个问题。
+
+WebSocket在完成握手之后，连接并不会消失，而客户端会通过回调的方式从服务端获取数据。
+
+同时WebSocket支持全双工通信，服务端不必等待请求可以直接向客户端发送数据
+
+![image-20201125234528499](/Users/yuanhao/Library/Application Support/typora-user-images/image-20201125234528499.png)
+
+- 全双工方式
+- 减少通信量：不再频繁交换header信息
+- 多路复用：多个URL可以使用同一个WebSocket连接
+- 心跳包
+
+### 典型应用：聊天室

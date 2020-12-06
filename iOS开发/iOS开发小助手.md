@@ -168,3 +168,28 @@ view.transform = CGAffineTransform(rotationAngle: 1.5) // 旋转
 view.transform = CGAffineTransform(translationX: 100, y: 50) // 平移
 ```
 
+## Date
+
+### 获取当前日期
+
+```swift
+let date = Date()
+let dateSinceNow = date.timeIntervalSinceNow //创建date的时间与当前时间之差，单位s
+let dateSince1970 = date.timeIntervalSince1970 //创建date的时间与1970标准时间之差，单位s
+```
+
+### 日期差格式化
+
+```swift
+// 得到dateNow与date的时间差
+let difference = Calendar.current.dateComponents([.hour, .minute, .second], from: dateNow, to: date)
+// 格式化
+if 	let hour = difference.hour,
+		let minute = difference.minute,
+		let second = difference.second
+{
+    let formattedString = String(format: "%02ld:%02ld:%02ld", hour, minute, second)
+    dateLabel.text = formattedString
+}
+```
+

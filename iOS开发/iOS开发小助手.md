@@ -77,9 +77,47 @@ if let fullTitleString = label.text {
 }
 ```
 
-## 页面切换
+## 文本编辑框
 
-### 场景一：根据条件决定pop回到哪个页面
+### 通用
+
+#### 退出编辑状态
+
+在编辑框的superview中调用endEditing方法
+
+```swift
+self.endEditing(true)
+```
+
+### 多行文本框UITextView
+
+## ViewController切换
+
+### present
+
+当执行代码`A.present(B, animated: true)`后
+
+属性presentingViewController：
+
+- 如果A present B modally，则B.presentingViewController == A
+- 如果B没有被A present modally，但是B的祖先C被present modally，则该属性被赋为present C modally的VC
+- 否则为nil
+
+属性presentedViewController：
+
+- A.presentedViewController == B
+
+利用两个属性可以判断某个VC是否被当前VC所present
+
+```swift
+func isPresentedViewController(viewController: UIViewController) {
+  	return viewController.presentingViewController.presentedViewController == viewController
+}
+```
+
+### 在NavigationController中跳转回指定ViewController
+
+#### 场景一：根据条件决定pop回到哪个ViewController
 
 一般来说开发中不会对同一个ViewController类进行多次push，因此可以以类类型作为pop依据
 
@@ -94,7 +132,7 @@ if let viewControllers = self.navigationController?.viewControllers {
 }
 ```
 
-### 场景二：A->B->C，C->A
+#### 场景二：A->B->C，C->A
 
 如果C固定跳转回A，则可以在B->C的push过程中将B自身从navigationController.viewControllers中删掉
 
@@ -128,29 +166,5 @@ view.transform = CGAffineTransform(scaleX: -1, y: 1) // 水平镜像
 view.transform = CGAffineTransform(scaleX: 2, y: 2) // 放大
 view.transform = CGAffineTransform(rotationAngle: 1.5) // 旋转
 view.transform = CGAffineTransform(translationX: 100, y: 50) // 平移
-```
-
-## ViewController的切换
-
-### present
-
-当执行代码`A.present(B, animated: true)`后
-
-属性presentingViewController：
-
-- 如果A present B modally，则B.presentingViewController == A
-- 如果B没有被A present modally，但是B的祖先C被present modally，则该属性被赋为present C modally的VC
-- 否则为nil
-
-属性presentedViewController：
-
-- A.presentedViewController == B
-
-利用两个属性可以判断某个VC是否被当前VC所present
-
-```swift
-func isPresentedViewController(viewController: UIViewController) {
-  	return viewController.presentingViewController.presentedViewController == viewController
-}
 ```
 

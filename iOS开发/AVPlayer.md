@@ -33,3 +33,18 @@ KVO：Key-value observing
 只提供对视频内容的展示，不提供任何内置的播放控制控件，可以用于创建自定义的播放界面
 
 ### AVPlayer可以通过URL播放视频和音频，AVAudioPlayer只能播放本地音频
+
+
+
+### CMTime
+
+AVPlayer中使用的时间单位都是CMTime，CMTime构造方法包含两个值，value和timescale，可以简单理解二者：
+
+- timeScale：将1s切分成多少个单位时间，比如timescale=600，则此时`单位时间`就是1/600
+- value：`单位时间`个数，而不是帧数
+
+假如读取了一个视频，得知其长度即`duration`属性为`CMTime(36000, 600)`，那么可知这里将1s切分为600个`单位时间`，而视频总长度为36000个`单位时间`，即总长度为60s。
+
+timescale有何意义？为了减少浮点数产生的误差累计，更精确地表达时间
+
+> https://www.jianshu.com/p/f02aad2e7ff5

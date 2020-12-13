@@ -77,8 +77,25 @@ if let fullTitleString = label.text {
 }
 ```
 
-## 文本编辑框
+## 文本编辑UITextView
 
+### 退出编辑状态
+
+```swift
+self.endEditing(true)
+```
+
+### 加入placeholder（UITextView默认没有placeholder）
+
+> https://www.jianshu.com/p/9edb8be75e0b
+
+### 设置文字范围（设置边距）
+
+```swift
+textView.textContainerInset = .init(top: 15, left: 11, bottom: 30, right: 11)
+```
+
+## 页面切换
 ### 通用
 
 #### 退出编辑状态
@@ -192,4 +209,40 @@ if 	let hour = difference.hour,
     dateLabel.text = formattedString
 }
 ```
+## tintColor
+
+tintColor，谷歌翻译为“着色颜色”，是可继承和传递的颜色值。
+
+### 特点
+
+- 如果当前view的tintColor属性为nil，则会自动使用superview的tintColor值
+- 如果整个hierarchy中都没有找到非默认的tintColor，则会自动使用系统定义的色调颜色
+
+### 不同控件下tintColor表达不同的含义
+
+- navigation bar、tab bar：按钮上的文字和icon颜色
+- text views：选择的指针和文字的高亮颜色
+- progress bar：轨迹颜色
+
+> https://www.hackingwithswift.com/example-code/uikit/how-to-set-the-tint-color-of-a-uiview
+
+- **imageView**：UIImageView会将自身的`tintColor`应用到template images上。关于template image，需要了解UIImage的`renderingMode`属性：
+
+  ```swift
+  enum RenderingMode {
+    	case automatic
+    	case alwaysOriginal
+    	case alwaysTemplate 
+  }
+  ```
+
+  - automatic：使用上下文的默认设置
+
+  - alwaysOriginal：使用原图片，不改变图片的颜色信息
+
+  - alwaysTemplate：忽略图片原本的颜色信息，作为模板图片，此时hierarchy中的`tintColor`可以修改图片本身的颜色，但不会修改`backgroundColor`
+
+    > 注：这一特性特别适合单色图片的颜色修改，无需增加额外切图，减少包体积
+
+  > https://www.jianshu.com/p/8d91c59bb62d
 

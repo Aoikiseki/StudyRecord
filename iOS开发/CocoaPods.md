@@ -126,6 +126,10 @@ end
 
   `:configurations => ['Debug', 'DebugInHouse', 'InHouse']`
 
+## CocoaPods版本的升级和降级
+
+> https://kukumalucn.github.io/blog/2018/09/20/Cocoapods%E7%9A%84%E7%89%88%E6%9C%AC%E5%8D%87%E7%BA%A7%E5%92%8C%E9%99%8D%E7%BA%A7/
+
 ## Test Pod
 
 ## Trunk

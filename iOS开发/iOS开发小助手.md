@@ -23,6 +23,25 @@ DispatchQueue.main.async {
 }
 ```
 
+## 强制横竖屏
+
+需要override VC中的三个属性，以强制横屏为例
+
+```swift
+public override var shouldAutorotate: Bool {
+  	return true
+}
+
+public override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+  	return .landscapeRight
+}
+
+// 声明当前VC支持的方向，以bit mask的形式进行设置（swift中数组形式即可）
+public override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+  	return .landscape
+}
+```
+
 ## Layer
 
 ### 添加圆角
@@ -77,6 +96,17 @@ if let fullTitleString = label.text {
 }
 ```
 
+### 获取文本的外接矩形
+
+```swift
+labelSize = title.boundingRect(
+  	with: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 16),
+  	options: NSStringDrawingOptions.usesLineFragmentOrigin,
+  	attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12)],
+  	context: nil
+).size
+```
+
 ## 文本编辑UITextView
 
 ### 退出编辑状态
@@ -95,7 +125,6 @@ self.endEditing(true)
 textView.textContainerInset = .init(top: 15, left: 11, bottom: 30, right: 11)
 ```
 
-## 页面切换
 ### 通用
 
 #### 退出编辑状态

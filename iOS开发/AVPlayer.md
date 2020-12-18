@@ -34,7 +34,13 @@ KVO：Key-value observing
 
 ### AVPlayer可以通过URL播放视频和音频，AVAudioPlayer只能播放本地音频
 
+### AVPlayerLayer
 
+- 通过`videoRect`属性可以获取视频实际展示的区域
+
+### AVPlayerItem
+
+- 通过presentationSize可以得到视频播放的resolution
 
 ### CMTime
 

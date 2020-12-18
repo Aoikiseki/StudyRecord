@@ -73,6 +73,8 @@ animation.toValue = 400
 
 对于一个View依据不同环境要进行不同动画，可以先创建出所有的animation，通过参数判断add哪一个animation
 
+keyPath list: https://stackoverflow.com/questions/44230796/what-is-the-full-keypath-list-for-cabasicanimation
+
 ### 动画结束后复原问题
 
 确保下面两个属性设置正确

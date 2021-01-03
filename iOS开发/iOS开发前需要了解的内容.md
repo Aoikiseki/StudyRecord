@@ -134,3 +134,17 @@ LayoutGuide的snapkit用法
 make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
 ```
 
+## .plist
+
+> An information property list file is a structured text file that contains essential configuration information for a bundled executable.
+
+新建一个iOS工程，首先看到目录下存在Info.plist文件，plist全称为property list，文件内部包含了app的重要配置。
+
+1. Launch Screen：字典类型，用来配置app启动时的加载场景，可以设置Image Name、Background Color等属性。
+
+   注：如果发现自己的app大小没有覆盖整个屏幕，那多半是没有设置这个属性
+
+参考文献
+
+- https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/AboutInformationPropertyListFiles.html
+- https://learnappmaking.com/plist-property-list-swift-how-to/

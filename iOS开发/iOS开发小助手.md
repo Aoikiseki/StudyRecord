@@ -64,7 +64,9 @@ layer.shadowRadius = 10.0
 3. 需要确保当前`view.backgroundColor != .clear`
 4. 如果是UIImageView，没有手动设置过`backgroundColor`，则只有图片正常显示出来才会显示阴影
 
-## 文本和字符串
+## 富文本和字符串
+
+> 富文本常用属性：https://www.jianshu.com/p/657382d53d5c
 
 ### UILabel显示多行文本
 

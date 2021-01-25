@@ -63,3 +63,36 @@ print(a.fibonacciOfAge)
 - https://abhimuralidharan.medium.com/lazy-var-in-ios-swift-96c75cb8a13a
 - https://stackoverflow.com/questions/38141298/lazy-initialisation-and-retain-cycle
 
+## KeyPath
+
+编译期做类型检查
+
+keyPath以`\Root.Value`作为出现形式
+
+https://www.swiftbysundell.com/articles/the-power-of-key-paths-in-swift/
+
+```swift
+/*
+ keyPath可以存储对属性的访问路径，而不持有属性的值
+ */
+struct BookInfo {
+    let id: Int
+    let content: String
+}
+
+let books = [BookInfo(id: 0, content: "math"), BookInfo(id: 1, content: "chinese"), BookInfo(id: 2, content: "english")]
+
+let keyPathToID = \BookInfo.id
+let keyPathToContent = \BookInfo.content
+
+func printIDAndContent<T>(array: [T], keyPathToID: KeyPath<T, Int>, keyPathToContent: KeyPath<T, String>) {
+    array.forEach {
+        print($0[keyPath: keyPathToID])
+        print($0[keyPath: keyPathToContent])
+    }
+}
+
+printIDAndContent(array: books, keyPathToID: keyPathToID, keyPathToContent: keyPathToContent)
+
+```
+

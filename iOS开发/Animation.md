@@ -137,3 +137,20 @@ UIView.animateKeyframes(withDuration: , delay: , options: , animations: , comple
 ```
 
 PS：是否递归？
+
+## UIViewPropertyAnimator
+
+### `state`
+
+- inactive：Animator的初始状态，或者通过调用`finishAnimation`后切换到该状态
+- active：Animator处于running or paused状态，即调用`startAnimation`或者`pauseAnimation`后会切换到该状态
+- stopped：调用`stopAnimation`后切换到该状态，当Animator处于该状态后，无法被再次start
+
+### `func finishAnimation`
+
+```swift
+func finishAnimation(at finalPosition: UIViewAnimatingPosition)
+```
+
+在state处于stopped后，调用该方法可以执行一些清理工作，并将state切换至`inactive`，苹果文档表示该方法只能在`stopAnimation(false)`后调用。
+

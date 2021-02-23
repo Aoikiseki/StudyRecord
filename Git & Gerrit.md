@@ -96,9 +96,9 @@ $ git config --global user.email "email@example.com"
 
 公司使用Gerrit作为代码库，有一些特有的命令
 
-push代码 `git push origin HEAD:refs/for/分支名`
-
-
+- push代码 `git push origin HEAD:refs/for/分支名`
+- 向远端推送分支`git push origin 待推送分支名`
+- 删除远端分支`git push origin :待删除分支名`（一般需要权限）
 
 ## 问题记录
 

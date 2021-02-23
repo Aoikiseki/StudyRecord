@@ -10,6 +10,8 @@ CocoaPods是swift和oc的依赖管理工具，用来管理项目中依赖的第�
 
 `sudo gem install cocoapods`
 
+[CocoaPods版本升降](https://kukumalucn.github.io/blog/2018/09/20/Cocoapods%E7%9A%84%E7%89%88%E6%9C%AC%E5%8D%87%E7%BA%A7%E5%92%8C%E9%99%8D%E7%BA%A7/)
+
 ## 使用
 
 - `pod init`
@@ -126,10 +128,14 @@ end
 
   `:configurations => ['Debug', 'DebugInHouse', 'InHouse']`
 
-## CocoaPods版本的升级和降级
+## pod repo push
 
-> https://kukumalucn.github.io/blog/2018/09/20/Cocoapods%E7%9A%84%E7%89%88%E6%9C%AC%E5%8D%87%E7%BA%A7%E5%92%8C%E9%99%8D%E7%BA%A7/
+`pod repo push REPO_NAME SPEC_NAME.podspec`：像指定repo中发布pod
 
-## Test Pod
+### 参数
 
-## Trunk
+- `--sources`：指定从哪里拉取该pod依赖项，可以通过逗号指定多个源
+- `--use-libraries`：
+- `--use-modular-headers`：
+- `--verbose`：输出更多调试信息
+
